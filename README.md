@@ -1,11 +1,6 @@
-# AsyncMethodNameFixer
+# Async Method Name Fixer
 
-<!-- Replace this badge with your own-->
-[![Build status](https://ci.appveyor.com/api/projects/status/hv6uyc059rqbc6fj?svg=true)](https://ci.appveyor.com/project/madskristensen/extensibilitytools)
-
-<!-- Update the VS Gallery link after you upload the VSIX-->
-Download this extension from the [VS Gallery](https://visualstudiogallery.msdn.microsoft.com/[GuidFromGallery])
-or get the [CI build](http://vsixgallery.com/extension/AsyncMethodNameFixer.3f1bd9bf-d048-4430-8705-1a26a4819614/).
+Download this extension from the [VS Marketplace](https://visualstudiogallery.msdn.microsoft.com/[GuidFromGallery])
 
 ---------------------------------------
 
@@ -22,7 +17,7 @@ If there is any asynchronous method violating the naming convention then the ana
 
 ![Warning](Screenshots/Warning.png)
 
-Clicking on lightbulb or pressing `Ctrl + . ` will show the fix with preview.
+Clicking on the lightbulb or pressing `Ctrl + . ` will show the fix with preview.
 
 ![Fix Preview](Screenshots/Fix_Preview.png)
 
