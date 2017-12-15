@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
@@ -9,17 +9,19 @@
   <PropertyGroup>
     <PackageId>AsyncMethodNameFixer</PackageId>
     <PackageVersion>1.0.0.0</PackageVersion>
-    <Authors>priyanshu</Authors>
-    <PackageLicenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</PackageLicenseUrl>
-    <PackageProjectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</PackageProjectUrl>
-    <PackageIconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</PackageIconUrl>
-    <RepositoryUrl>http://REPOSITORY_URL_HERE_OR_DELETE_THIS_LINE</RepositoryUrl>
+    <Authors>Priyanshu Agrawal</Authors>
+    <PackageLicenseUrl>https://github.com/priyanshu92/AsyncMethodNameFixer/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/priyanshu92/AsyncMethodNameFixer</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/priyanshu92/AsyncMethodNameFixer/master/AsyncMethodNameFixer/AsyncMethodNameFixer.Vsix/source.extension.ico</PackageIconUrl>
+    <RepositoryUrl>https://github.com/priyanshu92/AsyncMethodNameFixer</RepositoryUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Description>AsyncMethodNameFixer</Description>
-    <PackageReleaseNotes>Summary of changes made in this release of the package.</PackageReleaseNotes>
+    <Description>The easiest way to analyze and fix method names for asynchronous methods.</Description>
+    <PackageReleaseNotes>Fix Async Method Names</PackageReleaseNotes>
     <Copyright>Copyright</Copyright>
-    <PackageTags>AsyncMethodNameFixer, analyzers</PackageTags>
+    <PackageTags>analyzer, async, asynchronous, C#, code analysis, name fix, refactoring, roslyn</PackageTags>
     <NoPackageAnalysis>true</NoPackageAnalysis>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <Company />
   </PropertyGroup>
    
   <ItemGroup>
