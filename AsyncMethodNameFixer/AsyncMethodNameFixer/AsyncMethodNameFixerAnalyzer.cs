@@ -13,8 +13,8 @@ namespace AsyncMethodNameFixer
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AsyncMethodNameFixerAnalyzer : DiagnosticAnalyzer
     {
-        public const string AsyncDiagnosticId = "AsyncMethodDiagnostic";
-        public const string NonAsyncDiagnosticId = "NonAsyncMethodDiagnostic";
+        public const string AsyncDiagnosticId = "AMNF0001";
+        public const string NonAsyncDiagnosticId = "AMNF0002";
 
         private static readonly LocalizableString AsyncTitle = new LocalizableResourceString(nameof(Resources.AsyncAnalyzerTitle), Resources.ResourceManager, typeof(Resources));
         private static readonly LocalizableString AsyncMessageFormat = new LocalizableResourceString(nameof(Resources.AsyncAnalyzerMessageFormat), Resources.ResourceManager, typeof(Resources));
