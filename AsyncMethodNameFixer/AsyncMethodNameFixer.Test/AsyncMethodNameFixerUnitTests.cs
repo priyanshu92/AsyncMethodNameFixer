@@ -2,15 +2,43 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using TestHelper;
-using AsyncMethodNameFixer;
 
 namespace AsyncMethodNameFixer.Test
 {
     [TestClass]
     public class UnitTest : CodeFixVerifier
     {
+        private void ExpectDiagnostic(string inputText, string message, int column, int row, string diagnostic)
+        {
+            var expected = new DiagnosticResult
+            {
+                Id = diagnostic,
+                Message = message,
+                Severity = DiagnosticSeverity.Warning,
+                Locations =
+                    new[]
+                    {
+                        new DiagnosticResultLocation("Test0.cs", column, row)
+                    }
+            };
+
+            VerifyCSharpDiagnostic(inputText, expected);
+        }
+
+
+        private void ExpectMissingAsync(string inputText, string methodName, int column, int row)
+        {
+            var message = string.Format("Method name '{0}' is missing 'Async' at the end", methodName);
+            ExpectDiagnostic(inputText, message, column, row, AsyncMethodNameFixerAnalyzer.AsyncDiagnosticId);
+        }
+
+        private void ExpectUnnecessaryAsync(string inputText, string methodName, int column, int row)
+        {
+            var message = string.Format("Method name '{0}' is having 'Async' at the end", methodName);
+            ExpectDiagnostic(inputText, message, column, row, AsyncMethodNameFixerAnalyzer.NonAsyncDiagnosticId);
+        }
+
 
         [TestMethod]
         public void No_Diagnostics_Should_Show_For_Empty_Code()
@@ -41,19 +69,7 @@ namespace AsyncMethodNameFixer.Test
             } 
         }
     }";
-            var expected = new DiagnosticResult
-            {
-                Id = "AsyncMethodDiagnostic",
-                Message = String.Format("Method name '{0}' is missing 'Async' at the end", "MyMethod"),
-                Severity = DiagnosticSeverity.Warning,
-                Locations =
-                    new[] {
-                            new DiagnosticResultLocation("Test0.cs", 13, 31)
-                        }
-            };
-
-            VerifyCSharpDiagnostic(test, expected);
-
+            ExpectMissingAsync(test, "MyMethod", 13, 31);
             var fixtest = @"
     using System;
     using System.Collections.Generic;
@@ -76,6 +92,85 @@ namespace AsyncMethodNameFixer.Test
         }
 
         [TestMethod]
+        public void Should_Give_Warning_And_Fix_If_Awaitable_Method_Name_Does_Not_End_With_Async()
+        {
+            var test = @"
+    using System.Threading.Tasks;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public Task MyMethod(string input)
+            {
+                return Task.Delay(1000);
+            } 
+        }
+    }";
+            ExpectMissingAsync(test, "MyMethod", 7, 25);
+        }
+
+
+        [TestMethod]
+        public void Should_Give_Warning_And_Fix_If_AsyncVoid_Method_Name_Does_Not_End_With_Async()
+        {
+            var test = @"
+    using System.Threading.Tasks;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public async void MyMethod(string input)
+            {
+                await Task.Delay(1000);
+            } 
+        }
+    }";
+            ExpectMissingAsync(test, "MyMethod", 7, 31);
+        }
+
+        [TestMethod]
+        public void Should_Give_Warning_And_Fix_If_GenericTask_Method_Name_Does_Not_End_With_Async()
+        {
+            var test = @"
+    using System.Threading.Tasks;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public Task<int> MyMethod(string input)
+            {
+               return Task.FromResult(0);
+            } 
+        }
+    }";
+            ExpectMissingAsync(test, "MyMethod", 7, 30);
+        }
+
+
+        [TestMethod]
+        public void Should_Give_Warning_And_Fix_If_NonTaskAwaitable_Method_Name_Does_Not_End_With_Async()
+        {
+            var test = @"
+    using System.Threading.Tasks;
+    namespace ConsoleApplication1
+    {
+        interface IAwaitable {
+        int GetAwaiter();
+        }
+       
+        class TypeName
+        {
+            public IAwaitable MyMethod(string input)
+            {
+                return null;
+            } 
+        }
+    }";
+            ExpectMissingAsync(test, "MyMethod", 11, 31);
+        }
+
+
+        [TestMethod]
         public void Should_Give_Warning_And_Fix_If_Non_Async_Method_Name_Ends_With_Async()
         {
             var test = @"
@@ -96,19 +191,8 @@ namespace AsyncMethodNameFixer.Test
             } 
         }
     }";
-            var expected = new DiagnosticResult
-            {
-                Id = "NonAsyncMethodDiagnostic",
-                Message = String.Format("Method name '{0}' is having 'Async' at the end", "AsyncMethodAsync"),
-                Severity = DiagnosticSeverity.Warning,
-                Locations =
-                    new[] {
-                            new DiagnosticResultLocation("Test0.cs", 13, 25)
-                        }
-            };
 
-            VerifyCSharpDiagnostic(test, expected);
-
+            ExpectUnnecessaryAsync(test, "AsyncMethodAsync", 13, 25);
             var fixtest = @"
     using System;
     using System.Collections.Generic;
