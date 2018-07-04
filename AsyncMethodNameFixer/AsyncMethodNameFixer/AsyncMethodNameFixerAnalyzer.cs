@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Threading;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace AsyncMethodNameFixer
@@ -25,33 +20,52 @@ namespace AsyncMethodNameFixer
         private static readonly LocalizableString NonAsyncDescription = new LocalizableResourceString(nameof(Resources.NonAsyncAnalyzerDescription), Resources.ResourceManager, typeof(Resources));
         private const string Category = "Naming";
 
-        private static DiagnosticDescriptor AsyncRule = new DiagnosticDescriptor(AsyncDiagnosticId, AsyncTitle, AsyncMessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: AsyncDescription);
+        private static readonly DiagnosticDescriptor AsyncRule = new DiagnosticDescriptor(AsyncDiagnosticId, AsyncTitle, AsyncMessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: AsyncDescription);
 
-        private static DiagnosticDescriptor NonAsyncRule = new DiagnosticDescriptor(NonAsyncDiagnosticId, NonAsyncTitle, NonAsyncMessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: NonAsyncDescription);
+        private static readonly DiagnosticDescriptor NonAsyncRule = new DiagnosticDescriptor(NonAsyncDiagnosticId, NonAsyncTitle, NonAsyncMessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: NonAsyncDescription);
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(AsyncRule, NonAsyncRule); } }
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(AsyncRule, NonAsyncRule);
 
         public override void Initialize(AnalysisContext context)
         {
             context.RegisterSymbolAction(AnalyzeSymbol, SymbolKind.Method);
         }
 
+        private static bool IsAwaitable(IMethodSymbol method)
+        {
+            //TODO - this can't detect awaitable return types that are subclasses of awaitable base-classes.
+            //It seems unlikely anyone would want to do that in practice though!
+
+            //The defining characteristic of an asynchronous method is that its return type implements GetAwaiter
+            //It's probably overkill to also check the interfaces but it's more complete in case anyone decides not
+            //to uses Tasks in future.
+            var returnType = method.ReturnType;
+            
+            var allMembers = returnType.Interfaces.SelectMany(i => i.MemberNames)
+                .Concat(returnType.GetMembers().Select(m=>m.Name))
+                .ToArray();
+            var isAwaitable = allMembers.Contains(WellKnownMemberNames.GetAwaiter);
+            //also check for async in case this is async void
+            return isAwaitable || method.IsAsync;
+        }
+
         private static void AnalyzeSymbol(SymbolAnalysisContext context)
         {
             var methodSymbol = (IMethodSymbol)context.Symbol;
-
-            if (methodSymbol.IsAsync && !methodSymbol.Name.EndsWith("Async"))
+           
+            if (IsAwaitable(methodSymbol) && !methodSymbol.Name.EndsWith("Async"))
             {
                 var diagnostic = Diagnostic.Create(AsyncRule, methodSymbol.Locations[0], methodSymbol.Name);
 
                 context.ReportDiagnostic(diagnostic);
             }
 
-            if (!methodSymbol.IsAsync && methodSymbol.Name.EndsWith("Async"))
+            if (!IsAwaitable(methodSymbol) && methodSymbol.Name.EndsWith("Async"))
             {
                 var diagnostic = Diagnostic.Create(NonAsyncRule, methodSymbol.Locations[0], methodSymbol.Name);
                 context.ReportDiagnostic(diagnostic);
             }
         }
     }
+
 }
