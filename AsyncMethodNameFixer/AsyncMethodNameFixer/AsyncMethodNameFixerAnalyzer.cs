@@ -53,14 +53,14 @@ namespace AsyncMethodNameFixer
         {
             var methodSymbol = (IMethodSymbol)context.Symbol;
            
-            if (IsAwaitable(methodSymbol) && !methodSymbol.Name.EndsWith("Async"))
+            if (IsAwaitable(methodSymbol) && !methodSymbol.IsOverride && !methodSymbol.Name.EndsWith("Async"))
             {
                 var diagnostic = Diagnostic.Create(AsyncRule, methodSymbol.Locations[0], methodSymbol.Name);
 
                 context.ReportDiagnostic(diagnostic);
             }
 
-            if (!IsAwaitable(methodSymbol) && methodSymbol.Name.EndsWith("Async"))
+            if (!IsAwaitable(methodSymbol) && !methodSymbol.IsOverride && methodSymbol.Name.EndsWith("Async"))
             {
                 var diagnostic = Diagnostic.Create(NonAsyncRule, methodSymbol.Locations[0], methodSymbol.Name);
                 context.ReportDiagnostic(diagnostic);
