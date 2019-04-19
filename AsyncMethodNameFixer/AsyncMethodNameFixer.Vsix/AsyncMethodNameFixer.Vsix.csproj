@@ -111,7 +111,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="source.extension.cs">
+    <Compile Include="source.extension1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
       <DependentUpon>source.extension.vsixmanifest</DependentUpon>
     </Compile>
   </ItemGroup>
