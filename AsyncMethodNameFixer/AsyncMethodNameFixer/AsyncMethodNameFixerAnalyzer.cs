@@ -1,7 +1,9 @@
-using System.Collections.Immutable;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 
 namespace AsyncMethodNameFixer
 {
@@ -24,6 +26,8 @@ namespace AsyncMethodNameFixer
 
         private static readonly DiagnosticDescriptor NonAsyncRule = new DiagnosticDescriptor(NonAsyncDiagnosticId, NonAsyncTitle, NonAsyncMessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: NonAsyncDescription);
 
+        private static readonly IList<string> testMethodAttributes = new List<string> { "TestMethod", "Test", "SetUp", "Theory", "Fact" };
+
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(AsyncRule, NonAsyncRule);
 
         public override void Initialize(AnalysisContext context)
@@ -40,9 +44,9 @@ namespace AsyncMethodNameFixer
             //It's probably overkill to also check the interfaces but it's more complete in case anyone decides not
             //to uses Tasks in future.
             var returnType = method.ReturnType;
-            
+
             var allMembers = returnType.Interfaces.SelectMany(i => i.MemberNames)
-                .Concat(returnType.GetMembers().Select(m=>m.Name))
+                .Concat(returnType.GetMembers().Select(m => m.Name))
                 .ToArray();
             var isAwaitable = allMembers.Contains(WellKnownMemberNames.GetAwaiter);
             //also check for async in case this is async void
@@ -52,20 +56,43 @@ namespace AsyncMethodNameFixer
         private static void AnalyzeSymbol(SymbolAnalysisContext context)
         {
             var methodSymbol = (IMethodSymbol)context.Symbol;
-           
-            if (IsAwaitable(methodSymbol) && !methodSymbol.Name.EndsWith("Async"))
+
+            if (ShouldEndWithAsync(methodSymbol))
             {
                 var diagnostic = Diagnostic.Create(AsyncRule, methodSymbol.Locations[0], methodSymbol.Name);
 
                 context.ReportDiagnostic(diagnostic);
             }
 
-            if (!IsAwaitable(methodSymbol) && methodSymbol.Name.EndsWith("Async"))
+            if (!IsAwaitable(methodSymbol) && !methodSymbol.IsOverride && methodSymbol.Name.EndsWith("Async"))
             {
                 var diagnostic = Diagnostic.Create(NonAsyncRule, methodSymbol.Locations[0], methodSymbol.Name);
                 context.ReportDiagnostic(diagnostic);
             }
         }
-    }
 
+        private static bool ShouldEndWithAsync(IMethodSymbol methodSymbol)
+        {
+            var interfaces = methodSymbol.ContainingType.Interfaces;
+
+            foreach (var item in interfaces)
+            {
+                if (item.MemberNames.Contains(methodSymbol.Name))
+                    return false;
+            }
+
+            var methodAttributes = methodSymbol.GetAttributes();
+
+            foreach (var testMethodAttribute in testMethodAttributes)
+            {
+                if (methodAttributes.Any(x => x.AttributeClass.Name.Equals($"{ testMethodAttribute }Attribute")))
+                    return false;
+            }
+
+            return IsAwaitable(methodSymbol)
+                && !methodSymbol.IsOverride
+                && !methodSymbol.Name.Equals("Main")
+                && !methodSymbol.Name.EndsWith("Async");
+        }
+    }
 }

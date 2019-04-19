@@ -10,7 +10,6 @@
 
 namespace AsyncMethodNameFixer {
     using System;
-    using System.Reflection;
     
     
     /// <summary>
@@ -20,7 +19,7 @@ namespace AsyncMethodNameFixer {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -40,7 +39,7 @@ namespace AsyncMethodNameFixer {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AsyncMethodNameFixer.Resources", typeof(Resources).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AsyncMethodNameFixer.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -71,7 +70,7 @@ namespace AsyncMethodNameFixer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method name &apos;{0}&apos; is missing &apos;Async&apos; at the end.
+        ///   Looks up a localized string similar to Asynchronous method &apos;{0}&apos; is missing &apos;Async&apos; at the end.
         /// </summary>
         internal static string AsyncAnalyzerMessageFormat {
             get {
@@ -80,7 +79,7 @@ namespace AsyncMethodNameFixer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method name is not ending with &apos;Async&apos;.
+        ///   Looks up a localized string similar to Asynchronous method name is not ending with &apos;Async&apos;.
         /// </summary>
         internal static string AsyncAnalyzerTitle {
             get {
@@ -89,7 +88,7 @@ namespace AsyncMethodNameFixer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Non-Asynchronous methods should not end with the word &apos;Async&apos;.
+        ///   Looks up a localized string similar to Synchronous methods should not end with the word &apos;Async&apos;.
         /// </summary>
         internal static string NonAsyncAnalyzerDescription {
             get {
@@ -98,7 +97,7 @@ namespace AsyncMethodNameFixer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method name &apos;{0}&apos; is having &apos;Async&apos; at the end.
+        ///   Looks up a localized string similar to Synchronous method &apos;{0}&apos; is having &apos;Async&apos; at the end.
         /// </summary>
         internal static string NonAsyncAnalyzerMessageFormat {
             get {
@@ -107,7 +106,7 @@ namespace AsyncMethodNameFixer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method name is end with &apos;Async&apos;.
+        ///   Looks up a localized string similar to Synchronous method name is ending with &apos;Async&apos;.
         /// </summary>
         internal static string NonAsyncAnalyzerTitle {
             get {

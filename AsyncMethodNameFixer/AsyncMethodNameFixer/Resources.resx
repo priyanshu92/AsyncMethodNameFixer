@@ -122,20 +122,20 @@
     <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
   <data name="AsyncAnalyzerMessageFormat" xml:space="preserve">
-    <value>Method name '{0}' is missing 'Async' at the end</value>
+    <value>Asynchronous method '{0}' is missing 'Async' at the end</value>
     <comment>The format-able message the diagnostic displays.</comment>
   </data>
   <data name="AsyncAnalyzerTitle" xml:space="preserve">
-    <value>Method name is not ending with 'Async'</value>
+    <value>Asynchronous method name is not ending with 'Async'</value>
     <comment>The title of the diagnostic.</comment>
   </data>
   <data name="NonAsyncAnalyzerDescription" xml:space="preserve">
-    <value>Non-Asynchronous methods should not end with the word 'Async'</value>
+    <value>Synchronous methods should not end with the word 'Async'</value>
   </data>
   <data name="NonAsyncAnalyzerMessageFormat" xml:space="preserve">
-    <value>Method name '{0}' is having 'Async' at the end</value>
+    <value>Synchronous method '{0}' is having 'Async' at the end</value>
   </data>
   <data name="NonAsyncAnalyzerTitle" xml:space="preserve">
-    <value>Method name is end with 'Async'</value>
+    <value>Synchronous method name is ending with 'Async'</value>
   </data>
 </root>
