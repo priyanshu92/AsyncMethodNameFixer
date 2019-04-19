@@ -88,7 +88,7 @@ namespace AsyncMethodNameFixer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Non-Asynchronous methods should not end with the word &apos;Async&apos;.
+        ///   Looks up a localized string similar to Synchronous methods should not end with the word &apos;Async&apos;.
         /// </summary>
         internal static string NonAsyncAnalyzerDescription {
             get {
@@ -97,7 +97,7 @@ namespace AsyncMethodNameFixer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Non-Asynchronous method &apos;{0}&apos; is having &apos;Async&apos; at the end.
+        ///   Looks up a localized string similar to Synchronous method &apos;{0}&apos; is having &apos;Async&apos; at the end.
         /// </summary>
         internal static string NonAsyncAnalyzerMessageFormat {
             get {
@@ -106,7 +106,7 @@ namespace AsyncMethodNameFixer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Non-Asynchronous method name is ending with &apos;Async&apos;.
+        ///   Looks up a localized string similar to Synchronous method name is ending with &apos;Async&apos;.
         /// </summary>
         internal static string NonAsyncAnalyzerTitle {
             get {

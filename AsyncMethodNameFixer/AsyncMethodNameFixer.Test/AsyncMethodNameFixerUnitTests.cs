@@ -28,13 +28,13 @@ namespace AsyncMethodNameFixer.Test
 
         private void ExpectMissingAsync(string inputText, string methodName, int column, int row)
         {
-            var message = string.Format("Method name '{0}' is missing 'Async' at the end", methodName);
+            var message = $"Asynchronous method '{ methodName }' is missing 'Async' at the end";
             ExpectDiagnostic(inputText, message, column, row, AsyncMethodNameFixerAnalyzer.AsyncDiagnosticId);
         }
 
         private void ExpectUnnecessaryAsync(string inputText, string methodName, int column, int row)
         {
-            var message = string.Format("Method name '{0}' is having 'Async' at the end", methodName);
+            var message = $"Synchronous method '{ methodName }' is having 'Async' at the end";
             ExpectDiagnostic(inputText, message, column, row, AsyncMethodNameFixerAnalyzer.NonAsyncDiagnosticId);
         }
 
@@ -42,6 +42,148 @@ namespace AsyncMethodNameFixer.Test
         public void No_Diagnostics_Should_Show_For_Empty_Code()
         {
             var test = @"";
+
+            VerifyCSharpDiagnostic(test);
+        }
+
+        [TestMethod]
+        public void No_Diagnostics_Should_Show_For_Overridden_Methods()
+        {
+            var test = @"
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Diagnostics;
+
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public override async Task OverriddenMethod(string input)
+            {
+                await Task.Delay(1000);
+            }
+        }
+    }";
+
+            VerifyCSharpDiagnostic(test);
+        }
+
+        [TestMethod]
+        public void No_Diagnostics_Should_Show_For_Main_Method()
+        {
+            var test = @"
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Diagnostics;
+
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public async Task Main()
+            {
+                await Task.Delay(1000);
+            }
+        }
+    }";
+
+            VerifyCSharpDiagnostic(test);
+        }
+
+        [TestMethod]
+        public void No_Diagnostics_Should_Show_For_MS_Test_Methods()
+        {
+            var test = @"
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Diagnostics;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    namespace ConsoleApplication1
+    {
+        [TestClass]
+        public class TypeName
+        {
+            [TestMethod]
+            public async Task TestMethod1()
+            {
+                await Task.Delay(1000);
+            }
+        }
+    }";
+
+            VerifyCSharpDiagnostic(test);
+        }
+
+        [TestMethod]
+        public void No_Diagnostics_Should_Show_For_NUnit_Test_Methods()
+        {
+            var test = @"
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Diagnostics;
+
+    namespace ConsoleApplication1
+    {
+        public class TypeName
+        {
+            [Test]
+            public async Task TestMethod1()
+            {
+                await Task.Delay(1000);
+            }
+
+            [Theory]
+            public async Task TestMethod2()
+            {
+                await Task.Delay(1000);
+            }
+        }
+    }";
+
+            VerifyCSharpDiagnostic(test);
+        }
+
+        [TestMethod]
+        public void No_Diagnostics_Should_Show_For_XUnit_Test_Methods()
+        {
+            var test = @"
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Diagnostics;
+
+    namespace ConsoleApplication1
+    {
+        public class TypeName
+        {
+            [Fact]
+            public async Task TestMethod1()
+            {
+                await Task.Delay(1000);
+            }
+
+            [Theory]
+            public async Task TestMethod2()
+            {
+                await Task.Delay(1000);
+            }
+        }
+    }";
 
             VerifyCSharpDiagnostic(test);
         }

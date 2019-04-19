@@ -1,5 +1,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
@@ -23,6 +25,8 @@ namespace AsyncMethodNameFixer
         private static readonly DiagnosticDescriptor AsyncRule = new DiagnosticDescriptor(AsyncDiagnosticId, AsyncTitle, AsyncMessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: AsyncDescription);
 
         private static readonly DiagnosticDescriptor NonAsyncRule = new DiagnosticDescriptor(NonAsyncDiagnosticId, NonAsyncTitle, NonAsyncMessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: NonAsyncDescription);
+
+        private static readonly IList<string> testMethodAttributes = new List<string> { "TestMethod", "Test", "SetUp", "Theory", "Fact" };
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(AsyncRule, NonAsyncRule);
 
@@ -53,7 +57,7 @@ namespace AsyncMethodNameFixer
         {
             var methodSymbol = (IMethodSymbol)context.Symbol;
 
-            if (IsAwaitable(methodSymbol) && !methodSymbol.IsOverride && !methodSymbol.Name.EndsWith("Async"))
+            if (ShouldEndWithAsync(methodSymbol))
             {
                 var diagnostic = Diagnostic.Create(AsyncRule, methodSymbol.Locations[0], methodSymbol.Name);
 
@@ -65,6 +69,30 @@ namespace AsyncMethodNameFixer
                 var diagnostic = Diagnostic.Create(NonAsyncRule, methodSymbol.Locations[0], methodSymbol.Name);
                 context.ReportDiagnostic(diagnostic);
             }
+        }
+
+        private static bool ShouldEndWithAsync(IMethodSymbol methodSymbol)
+        {
+            var interfaces = methodSymbol.ContainingType.Interfaces;
+
+            foreach (var item in interfaces)
+            {
+                if (item.MemberNames.Contains(methodSymbol.Name))
+                    return false;
+            }
+
+            var methodAttributes = methodSymbol.GetAttributes();
+
+            foreach (var testMethodAttribute in testMethodAttributes)
+            {
+                if (methodAttributes.Any(x => x.AttributeClass.Name.Equals($"{ testMethodAttribute }Attribute")))
+                    return false;
+            }
+
+            return IsAwaitable(methodSymbol)
+                && !methodSymbol.IsOverride
+                && !methodSymbol.Name.Equals("Main")
+                && !methodSymbol.Name.EndsWith("Async");
         }
     }
 }

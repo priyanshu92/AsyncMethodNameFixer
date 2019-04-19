@@ -130,12 +130,12 @@
     <comment>The title of the diagnostic.</comment>
   </data>
   <data name="NonAsyncAnalyzerDescription" xml:space="preserve">
-    <value>Non-Asynchronous methods should not end with the word 'Async'</value>
+    <value>Synchronous methods should not end with the word 'Async'</value>
   </data>
   <data name="NonAsyncAnalyzerMessageFormat" xml:space="preserve">
-    <value>Non-Asynchronous method '{0}' is having 'Async' at the end</value>
+    <value>Synchronous method '{0}' is having 'Async' at the end</value>
   </data>
   <data name="NonAsyncAnalyzerTitle" xml:space="preserve">
-    <value>Non-Asynchronous method name is ending with 'Async'</value>
+    <value>Synchronous method name is ending with 'Async'</value>
   </data>
 </root>
