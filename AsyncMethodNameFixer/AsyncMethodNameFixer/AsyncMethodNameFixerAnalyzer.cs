@@ -1,7 +1,7 @@
-using System.Collections.Immutable;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
+using System.Collections.Immutable;
+using System.Linq;
 
 namespace AsyncMethodNameFixer
 {
@@ -40,9 +40,9 @@ namespace AsyncMethodNameFixer
             //It's probably overkill to also check the interfaces but it's more complete in case anyone decides not
             //to uses Tasks in future.
             var returnType = method.ReturnType;
-            
+
             var allMembers = returnType.Interfaces.SelectMany(i => i.MemberNames)
-                .Concat(returnType.GetMembers().Select(m=>m.Name))
+                .Concat(returnType.GetMembers().Select(m => m.Name))
                 .ToArray();
             var isAwaitable = allMembers.Contains(WellKnownMemberNames.GetAwaiter);
             //also check for async in case this is async void
@@ -52,7 +52,7 @@ namespace AsyncMethodNameFixer
         private static void AnalyzeSymbol(SymbolAnalysisContext context)
         {
             var methodSymbol = (IMethodSymbol)context.Symbol;
-           
+
             if (IsAwaitable(methodSymbol) && !methodSymbol.IsOverride && !methodSymbol.Name.EndsWith("Async"))
             {
                 var diagnostic = Diagnostic.Create(AsyncRule, methodSymbol.Locations[0], methodSymbol.Name);
@@ -67,5 +67,4 @@ namespace AsyncMethodNameFixer
             }
         }
     }
-
 }

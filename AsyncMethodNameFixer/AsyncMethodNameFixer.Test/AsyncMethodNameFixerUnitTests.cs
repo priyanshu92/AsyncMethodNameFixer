@@ -26,7 +26,6 @@ namespace AsyncMethodNameFixer.Test
             VerifyCSharpDiagnostic(inputText, expected);
         }
 
-
         private void ExpectMissingAsync(string inputText, string methodName, int column, int row)
         {
             var message = string.Format("Method name '{0}' is missing 'Async' at the end", methodName);
@@ -38,7 +37,6 @@ namespace AsyncMethodNameFixer.Test
             var message = string.Format("Method name '{0}' is having 'Async' at the end", methodName);
             ExpectDiagnostic(inputText, message, column, row, AsyncMethodNameFixerAnalyzer.NonAsyncDiagnosticId);
         }
-
 
         [TestMethod]
         public void No_Diagnostics_Should_Show_For_Empty_Code()
@@ -66,7 +64,7 @@ namespace AsyncMethodNameFixer.Test
             public async Task MyMethod(string input)
             {
                 await Task.Delay(1000);
-            } 
+            }
         }
     }";
             ExpectMissingAsync(test, "MyMethod", 13, 31);
@@ -85,7 +83,7 @@ namespace AsyncMethodNameFixer.Test
             public async Task MyMethodAsync(string input)
             {
                 await Task.Delay(1000);
-            } 
+            }
         }
     }";
             VerifyCSharpFix(test, fixtest);
@@ -103,12 +101,11 @@ namespace AsyncMethodNameFixer.Test
             public Task MyMethod(string input)
             {
                 return Task.Delay(1000);
-            } 
+            }
         }
     }";
             ExpectMissingAsync(test, "MyMethod", 7, 25);
         }
-
 
         [TestMethod]
         public void Should_Give_Warning_And_Fix_If_AsyncVoid_Method_Name_Does_Not_End_With_Async()
@@ -122,7 +119,7 @@ namespace AsyncMethodNameFixer.Test
             public async void MyMethod(string input)
             {
                 await Task.Delay(1000);
-            } 
+            }
         }
     }";
             ExpectMissingAsync(test, "MyMethod", 7, 31);
@@ -140,12 +137,11 @@ namespace AsyncMethodNameFixer.Test
             public Task<int> MyMethod(string input)
             {
                return Task.FromResult(0);
-            } 
+            }
         }
     }";
             ExpectMissingAsync(test, "MyMethod", 7, 30);
         }
-
 
         [TestMethod]
         public void Should_Give_Warning_And_Fix_If_NonTaskAwaitable_Method_Name_Does_Not_End_With_Async()
@@ -157,18 +153,17 @@ namespace AsyncMethodNameFixer.Test
         interface IAwaitable {
         int GetAwaiter();
         }
-       
+
         class TypeName
         {
             public IAwaitable MyMethod(string input)
             {
                 return null;
-            } 
+            }
         }
     }";
             ExpectMissingAsync(test, "MyMethod", 11, 31);
         }
-
 
         [TestMethod]
         public void Should_Give_Warning_And_Fix_If_Non_Async_Method_Name_Ends_With_Async()
@@ -188,7 +183,7 @@ namespace AsyncMethodNameFixer.Test
             public void AsyncMethodAsync()
             {
                 Console.WriteLine(""Hello World"");
-            } 
+            }
         }
     }";
 
@@ -208,7 +203,7 @@ namespace AsyncMethodNameFixer.Test
             public void AsyncMethod()
             {
                 Console.WriteLine(""Hello World"");
-            } 
+            }
         }
     }";
             VerifyCSharpFix(test, fixtest);
