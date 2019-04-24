@@ -63,3 +63,15 @@ steps:
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)\Packages'
     ArtifactName: 'Packages'
+
+- task: PowerShell@2
+  displayName: 'Install Vsix Gallery Script'
+  inputs:
+    targetType: 'inline'
+    script: '(new-object Net.WebClient).DownloadString("https://raw.github.com/madskristensen/ExtensionScripts/master/AppVeyor/vsix.ps1") | iex'
+
+- task: PowerShell@2
+  displayName: 'Publish Extenstion to Vsix Gallery'
+  inputs:
+    targetType: 'inline'
+    script: 'Vsix-PublishToGallery $(Build.ArtifactStagingDirectory)\Packages'
