@@ -13,7 +13,7 @@ pool:
   vmImage: 'VS2017-Win2016'
 
 variables:
-  outputFolder: './artifacts'
+  outputFolder: '../../artifacts'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
@@ -22,8 +22,15 @@ steps:
   displayName: Show dotnet version
 
 - task: DotNetCoreCLI@2
-  displayName: 'Build AsyncMethodNameFixer and AsyncMethodNameFixer.Test'
+  displayName: 'Build AsyncMethodNameFixer'
   inputs:
     command: 'build'
     projects: 'AsyncMethodNameFixer/AsyncMethodNameFixer/AsyncMethodNameFixer.csproj'
-    arguments: '--configuration $(buildConfiguration) --output $(outputFolder)'
+    arguments: '--configuration $(buildConfiguration) --output "$(outputFolder)/AsyncMethodNameFixer/"'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build AsyncMethodNameFixer.Test'
+  inputs:
+    command: 'build'
+    projects: 'AsyncMethodNameFixer/AsyncMethodNameFixer.Test/AsyncMethodNameFixer.Test.csproj'
+    arguments: '--configuration $(buildConfiguration) --output "$(outputFolder)/AsyncMethodNameFixer.Test/"'
