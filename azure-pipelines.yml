@@ -33,7 +33,6 @@ steps:
   displayName: 'Build'
   inputs:
     solution: '$(solution)'
-    vsVersion: '16.0'
     configuration: '$(buildConfiguration)'
     clean: true
     msbuildArchitecture: 'x64'
