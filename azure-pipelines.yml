@@ -13,7 +13,7 @@ pool:
   vmImage: 'VS2017-Win2016'
 
 variables:
-  solution: 'AsyncMethodNameFixer.sln'
+  outputFolder: './artifacts'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
@@ -25,5 +25,5 @@ steps:
   displayName: 'Build AsyncMethodNameFixer and AsyncMethodNameFixer.Test'
   inputs:
     command: 'build'
-    projects: 'AsyncMethodNameFixer/AsyncMethodNameFixer/AsyncMethodNameFixer.csproj,AsyncMethodNameFixer/AsyncMethodNameFixer.Test/AsyncMethodNameFixer.Test.csproj'
-    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    projects: 'AsyncMethodNameFixer/AsyncMethodNameFixer/AsyncMethodNameFixer.csproj'
+    arguments: '--configuration $(buildConfiguration) --output $(outputFolder)'
