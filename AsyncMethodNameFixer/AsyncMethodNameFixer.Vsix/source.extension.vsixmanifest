@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="3f1bd9bf-d048-4430-8705-1a26a4819614" Version="2.0.0" Language="en-US" Publisher="Priyanshu Agrawal"/>
+        <Identity Id="3f1bd9bf-d048-4430-8705-1a26a4819614" Version="2.0.1" Language="en-US" Publisher="Priyanshu Agrawal"/>
         <DisplayName>Async Method Name Fixer</DisplayName>
         <Description xml:space="preserve">The easiest way to analyze and fix method names for asynchronous methods.</Description>
         <MoreInfo>https://github.com/priyanshu92/AsyncMethodNameFixer</MoreInfo>

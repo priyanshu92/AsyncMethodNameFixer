@@ -11,7 +11,7 @@ namespace AsyncMethodNameFixer.Vsix
         public const string Name = "Async Method Name Fixer";
         public const string Description = @"The easiest way to analyze and fix method names for asynchronous methods.";
         public const string Language = "en-US";
-        public const string Version = "2.0.0";
+        public const string Version = "2.0.1";
         public const string Author = "Priyanshu Agrawal";
         public const string Tags = "analyzer, async, asynchronous, C#, code analysis, name fix, refactoring, roslyn";
     }
