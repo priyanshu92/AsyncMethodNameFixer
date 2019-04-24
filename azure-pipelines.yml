@@ -60,11 +60,13 @@ steps:
     OverWrite: true
 
 - task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifacts'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)\Packages'
     ArtifactName: 'Packages'
 
 - task: PowerShell@2
+  displayName: 'Publish extension to Vsix Gallery'
   inputs:
     filePath: './PublishToVsixGallery.ps1'
     arguments: '$(Build.ArtifactStagingDirectory)\Packages\*.vsix'
