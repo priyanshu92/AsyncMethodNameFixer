@@ -4,13 +4,20 @@ Download this extension from the [VS Marketplace](https://marketplace.visualstud
 
 ---------------------------------------
 
+[![Nuget](https://img.shields.io/nuget/v/AsyncMethodNameFixer.svg)](https://www.nuget.org/packages/AsyncMethodNameFixer)
+[![Nuget](https://img.shields.io/nuget/dt/AsyncMethodNameFixer.svg)](https://www.nuget.org/packages/AsyncMethodNameFixer)
+
 The easiest way to analyze and fix method names for asynchronous methods.
 
 See the [change log](CHANGELOG.md) for changes and road map.
 
 ## Features
 
-- Fix Async Method Names
+- Fix Async Method Names.
+- Ignores overridden methods.
+- Ignores `Main` method.
+- Ignores interface implemented methods.
+- Ignores test methods.
 
 ### Fix Async Method Names
 If there is any asynchronous method violating the naming convention then the analyzer will show a warning and the lightbulb to fix it.
