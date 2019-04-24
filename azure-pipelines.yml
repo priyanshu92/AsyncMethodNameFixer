@@ -39,8 +39,6 @@ steps:
   displayName: 'Build AsyncMethodNameFixer.Vsix'
   inputs:
     solution: 'AsyncMethodNameFixer/AsyncMethodNameFixer.Vsix/AsyncMethodNameFixer.Vsix.csproj'
-    msbuildArchitecture: 'x64'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
     msbuildArguments: '/p:OutputPath="$(outputFolder)/AsyncMethodNameFixer.Vsix/"'
-
