@@ -15,7 +15,15 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- task: NuGetCommand@2
+  displayName: 'Restoring Packages'
+  inputs:
+    command: 'restore'
+    solution: 'AsyncMethodNameFixer.sln'
+    selectOrConfig: 'config'
+
 - task: VSBuild@1
+  displayName: 'Building'
   inputs:
     solution: 'AsyncMethodNameFixer.sln'
     vsVersion: '16.0'
