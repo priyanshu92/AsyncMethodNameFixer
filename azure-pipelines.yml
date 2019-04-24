@@ -26,7 +26,7 @@ steps:
   inputs:
     command: 'build'
     projects: 'AsyncMethodNameFixer/AsyncMethodNameFixer/AsyncMethodNameFixer.csproj'
-    arguments: '--configuration $(buildConfiguration) --output "$(outputFolder)/AsyncMethodNameFixer/"'
+    arguments: '--configuration $(buildConfiguration) --output $(outputFolder)'
 
 - task: DotNetCoreCLI@2
   displayName: 'Test AsyncMethodNameFixer'
@@ -41,7 +41,7 @@ steps:
     solution: 'AsyncMethodNameFixer/AsyncMethodNameFixer.Vsix/AsyncMethodNameFixer.Vsix.csproj'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-    msbuildArguments: '/p:OutputPath="$(outputFolder)/AsyncMethodNameFixer.Vsix/"'
+    msbuildArguments: '/p:OutputPath=$(outputFolder)'
 
 - task: CopyFiles@2
   displayName: 'Copy Nuget Package'
