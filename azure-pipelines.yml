@@ -34,3 +34,13 @@ steps:
     command: 'build'
     projects: 'AsyncMethodNameFixer/AsyncMethodNameFixer.Test/AsyncMethodNameFixer.Test.csproj'
     arguments: '--configuration $(buildConfiguration) --output "$(outputFolder)/AsyncMethodNameFixer.Test/"'
+
+- task: MSBuild@1
+  displayName: 'Build AsyncMethodNameFixer.Vsix'
+  inputs:
+    solution: 'AsyncMethodNameFixer/AsyncMethodNameFixer/AsyncMethodNameFixer.Vsix/AsyncMethodNameFixer.Vsix.csproj'
+    msbuildArchitecture: 'x64'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    msbuildArguments: '/p:OutputPath="$(outputFolder)/AsyncMethodNameFixer.Vsix/"'
+
