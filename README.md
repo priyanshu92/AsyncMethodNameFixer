@@ -1,6 +1,6 @@
 # Async Method Name Fixer
 
-Download this extension from the [VS Marketplace](https://marketplace.visualstudio.com/items?itemName=PRIYANSHUAGRAWAL92.AsyncMethodNameFixer)
+Download this extension from the [VS Marketplace](https://marketplace.visualstudio.com/items?itemName=PRIYANSHUAGRAWAL92.AsyncMethodNameFixer) or get the [CI build](http://vsixgallery.com/extension/3f1bd9bf-d048-4430-8705-1a26a4819614/)
 
 ---------------------------------------
 
