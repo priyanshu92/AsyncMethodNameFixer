@@ -29,18 +29,11 @@ steps:
     arguments: '--configuration $(buildConfiguration) --output "$(outputFolder)/AsyncMethodNameFixer/"'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Build AsyncMethodNameFixer.Test'
-  inputs:
-    command: 'build'
-    projects: 'AsyncMethodNameFixer/AsyncMethodNameFixer.Test/AsyncMethodNameFixer.Test.csproj'
-    arguments: '--configuration $(buildConfiguration) --output "$(outputFolder)/AsyncMethodNameFixer.Test/"'
-
-- task: DotNetCoreCLI@2
+  displayName: 'Test AsyncMethodNameFixer'
   inputs:
     command: 'test'
     projects: 'AsyncMethodNameFixer/AsyncMethodNameFixer.Test/AsyncMethodNameFixer.Test.csproj'
-    arguments: '--no-build'
-    testRunTitle: 'Test AsyncMethodNameFixer'
+    testRunTitle: 'Tests'
 
 - task: MSBuild@1
   displayName: 'Build AsyncMethodNameFixer.Vsix'
