@@ -13,3 +13,10 @@ on the official Visual Studio extension gallery.
 
 - [x] Initial release
 - [x] Async method name analyzer and code fixer
+
+## 2.0
+
+- [x] Ignores overridden methods.
+- [x] Ignores `Main` method.
+- [x] Ignores interface implemented methods.
+- [x] Ignores test methods.
