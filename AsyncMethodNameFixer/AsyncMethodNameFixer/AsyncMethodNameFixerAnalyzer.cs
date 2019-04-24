@@ -85,7 +85,7 @@ namespace AsyncMethodNameFixer
 
             foreach (var testMethodAttribute in testMethodAttributes)
             {
-                if (methodAttributes.Any(x => x.AttributeClass.Name.Equals($"{ testMethodAttribute }Attribute")))
+                if (methodAttributes.Any(x => x.AttributeClass.Name.StartsWith(testMethodAttribute)))
                     return false;
             }
 
