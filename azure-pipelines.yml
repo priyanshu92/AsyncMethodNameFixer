@@ -47,7 +47,7 @@ steps:
   inputs:
     SourceFolder: '$(Build.ArtifactStagingDirectory)'
     Contents: '**\*.nupkg'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)\Nuget'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)\Packages'
     CleanTargetFolder: true
     OverWrite: true
 
@@ -56,6 +56,11 @@ steps:
   inputs:
     SourceFolder: '$(Build.ArtifactStagingDirectory)'
     Contents: '**\*.vsix'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)\Vsix'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)\Packages'
     CleanTargetFolder: true
     OverWrite: true
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)\Packages'
+    ArtifactName: 'Packages'
