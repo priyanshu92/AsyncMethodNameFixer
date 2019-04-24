@@ -13,7 +13,7 @@ pool:
   vmImage: 'windows-2019'
 
 variables:
-  solution: '**/*.sln'
+  solution: 'AsyncMethodNameFixer.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
@@ -22,13 +22,12 @@ steps:
   displayName: 'Restore Packages'
   inputs:
     command: 'restore'
-    solution: 'AsyncMethodNameFixer.sln'
-    selectOrConfig: 'config'
+    solution: '$(solution)'
 
 - task: VSBuild@1
   displayName: 'Build'
   inputs:
-    solution: 'AsyncMethodNameFixer.sln'
+    solution: '$(solution)'
     vsVersion: '16.0'
     configuration: '$(buildConfiguration)'
     clean: true
