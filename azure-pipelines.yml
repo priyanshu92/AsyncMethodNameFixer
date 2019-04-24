@@ -40,7 +40,7 @@ steps:
     solution: 'AsyncMethodNameFixer/AsyncMethodNameFixer.Vsix/AsyncMethodNameFixer.Vsix.csproj'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-    msbuildArguments: '/p:OutputPath=$(Build.ArtifactStagingDirectory)'
+    msbuildArguments: '/p:OutputPath=$(Build.ArtifactStagingDirectory) /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal'
 
 - task: CopyFiles@2
   displayName: 'Copy Nuget Package'
