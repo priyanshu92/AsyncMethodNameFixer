@@ -13,7 +13,6 @@ pool:
   vmImage: 'VS2017-Win2016'
 
 variables:
-  outputFolder: '../../artifacts'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
@@ -26,7 +25,7 @@ steps:
   inputs:
     command: 'build'
     projects: 'AsyncMethodNameFixer/AsyncMethodNameFixer/AsyncMethodNameFixer.csproj'
-    arguments: '--configuration $(buildConfiguration) --output $(outputFolder)'
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
 
 - task: DotNetCoreCLI@2
   displayName: 'Test AsyncMethodNameFixer'
@@ -41,20 +40,12 @@ steps:
     solution: 'AsyncMethodNameFixer/AsyncMethodNameFixer.Vsix/AsyncMethodNameFixer.Vsix.csproj'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-    msbuildArguments: '/p:OutputPath=$(outputFolder)'
-
-- task: CmdLine@2
-  inputs:
-    script: 'cd $(outputFolder)'
-
-- task: CmdLine@2
-  inputs:
-    script: 'dir'
+    msbuildArguments: '/p:OutputPath=$(Build.ArtifactStagingDirectory)'
 
 - task: CopyFiles@2
   displayName: 'Copy Nuget Package'
   inputs:
-    SourceFolder: '$(outputFolder)'
+    SourceFolder: '$(Build.ArtifactStagingDirectory)'
     Contents: '**\*.nupkg'
     TargetFolder: '$(Build.ArtifactStagingDirectory)\Nuget'
     CleanTargetFolder: true
@@ -63,7 +54,7 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy Vsix Package'
   inputs:
-    SourceFolder: '$(outputFolder)'
+    SourceFolder: '$(Build.ArtifactStagingDirectory)'
     Contents: '**\*.vsix'
     TargetFolder: '$(Build.ArtifactStagingDirectory)\Vsix'
     CleanTargetFolder: true
