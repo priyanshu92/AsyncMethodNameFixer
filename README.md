@@ -8,6 +8,7 @@ Download this extension from the [VS Marketplace](https://marketplace.visualstud
 [![Nuget](https://img.shields.io/nuget/dt/AsyncMethodNameFixer.svg)](https://www.nuget.org/packages/AsyncMethodNameFixer)
 [![Build Status](https://dev.azure.com/agrawalpriyanshu/AsyncMethodNameFixer/_apis/build/status/priyanshu92.AsyncMethodNameFixer?branchName=master)](https://dev.azure.com/agrawalpriyanshu/AsyncMethodNameFixer/_build/latest?definitionId=1&branchName=master)
 ![Azure DevOps tests](https://img.shields.io/azure-devops/tests/agrawalpriyanshu/AsyncMethodNameFixer/1.svg)
+
 The easiest way to analyze and fix method names for asynchronous methods.
 
 See the [change log](CHANGELOG.md) for changes and road map.
