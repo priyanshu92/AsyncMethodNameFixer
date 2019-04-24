@@ -35,6 +35,13 @@ steps:
     projects: 'AsyncMethodNameFixer/AsyncMethodNameFixer.Test/AsyncMethodNameFixer.Test.csproj'
     arguments: '--configuration $(buildConfiguration) --output "$(outputFolder)/AsyncMethodNameFixer.Test/"'
 
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    projects: 'AsyncMethodNameFixer/AsyncMethodNameFixer.Test/AsyncMethodNameFixer.Test.csproj'
+    arguments: '--no-build'
+    testRunTitle: 'Test AsyncMethodNameFixer'
+
 - task: MSBuild@1
   displayName: 'Build AsyncMethodNameFixer.Vsix'
   inputs:
