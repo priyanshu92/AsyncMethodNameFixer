@@ -45,7 +45,11 @@ steps:
 
 - task: CmdLine@2
   inputs:
-    script: 'cd $(outputFolder) && dir'
+    script: 'cd $(outputFolder)'
+
+- task: CmdLine@2
+  inputs:
+    script: 'dir'
 
 - task: CopyFiles@2
   displayName: 'Copy Nuget Package'
