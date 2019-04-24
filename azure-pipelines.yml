@@ -43,6 +43,14 @@ steps:
     configuration: '$(buildConfiguration)'
     msbuildArguments: '/p:OutputPath=$(outputFolder)'
 
+- task: CmdLine@2
+  inputs:
+    script: 'cd $(outputFolder)'
+
+- task: CmdLine@2
+  inputs:
+    script: 'dir'
+
 - task: CopyFiles@2
   displayName: 'Copy Nuget Package'
   inputs:
