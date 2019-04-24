@@ -57,21 +57,21 @@ namespace AsyncMethodNameFixer
         {
             var methodSymbol = (IMethodSymbol)context.Symbol;
 
-            if (ShouldEndWithAsync(methodSymbol))
+            if (ShouldHaveAsyncInTheEnd(methodSymbol))
             {
                 var diagnostic = Diagnostic.Create(AsyncRule, methodSymbol.Locations[0], methodSymbol.Name);
 
                 context.ReportDiagnostic(diagnostic);
             }
 
-            if (!IsAwaitable(methodSymbol) && !methodSymbol.IsOverride && methodSymbol.Name.EndsWith("Async"))
+            if (ShouldNotHaveAsyncInTheEnd(methodSymbol))
             {
                 var diagnostic = Diagnostic.Create(NonAsyncRule, methodSymbol.Locations[0], methodSymbol.Name);
                 context.ReportDiagnostic(diagnostic);
             }
         }
 
-        private static bool ShouldEndWithAsync(IMethodSymbol methodSymbol)
+        private static bool ShouldHaveAsyncInTheEnd(IMethodSymbol methodSymbol)
         {
             var interfaces = methodSymbol.ContainingType.Interfaces;
 
@@ -93,6 +93,21 @@ namespace AsyncMethodNameFixer
                 && !methodSymbol.IsOverride
                 && !methodSymbol.Name.Equals("Main")
                 && !methodSymbol.Name.EndsWith("Async");
+        }
+
+        private static bool ShouldNotHaveAsyncInTheEnd(IMethodSymbol methodSymbol)
+        {
+            var methodAttributes = methodSymbol.GetAttributes();
+
+            foreach (var testMethodAttribute in testMethodAttributes)
+            {
+                if (methodAttributes.Any(x => x.AttributeClass.Name.StartsWith(testMethodAttribute)))
+                    return false;
+            }
+
+            return !IsAwaitable(methodSymbol)
+                && !methodSymbol.IsOverride
+                && methodSymbol.Name.EndsWith("Async");
         }
     }
 }

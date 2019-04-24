@@ -182,6 +182,12 @@ namespace AsyncMethodNameFixer.Test
             {
                 await Task.Delay(1000);
             }
+
+            [Theory]
+            public void TestMethod3Async()
+            {
+                await Task.Delay(1000);
+            }
         }
     }";
 
