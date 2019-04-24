@@ -26,7 +26,7 @@ steps:
   inputs:
     command: 'build'
     projects: 'AsyncMethodNameFixer/AsyncMethodNameFixer/AsyncMethodNameFixer.csproj'
-    arguments: '--configuration $(buildConfiguration) --output "$(outputFolder)/AsyncMethodNameFixer/"'
+    arguments: '--configuration $(buildConfiguration) --output $(outputFolder)'
 
 - task: DotNetCoreCLI@2
   displayName: 'Test AsyncMethodNameFixer'
@@ -36,9 +36,27 @@ steps:
     testRunTitle: 'Tests'
 
 - task: MSBuild@1
-  displayName: 'Build AsyncMethodNameFixer.Vsix'
+  displayName: 'Create Vsix'
   inputs:
     solution: 'AsyncMethodNameFixer/AsyncMethodNameFixer.Vsix/AsyncMethodNameFixer.Vsix.csproj'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-    msbuildArguments: '/p:OutputPath="$(outputFolder)/AsyncMethodNameFixer.Vsix/"'
+    msbuildArguments: '/p:OutputPath=$(outputFolder)'
+
+- task: CopyFiles@2
+  displayName: 'Copy Nuget Package'
+  inputs:
+    SourceFolder: '$(outputFolder)'
+    Contents: '**\*.nupkg'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)\Nuget'
+    CleanTargetFolder: true
+    OverWrite: true
+
+- task: CopyFiles@2
+  displayName: 'Copy Vsix Package'
+  inputs:
+    SourceFolder: '$(outputFolder)'
+    Contents: '**\*.vsix'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)\Vsix'
+    CleanTargetFolder: true
+    OverWrite: true
