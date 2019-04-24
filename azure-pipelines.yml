@@ -17,11 +17,9 @@ variables:
 steps:
 - task: VSBuild@1
   inputs:
-    solution: '$(solution)'
-    platform: '$(buildPlatform)'
+    solution: 'AsyncMethodNameFixer.sln'
+    vsVersion: '16.0'
     configuration: '$(buildConfiguration)'
-
-- task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    clean: true
+    restoreNugetPackages: true
+    msbuildArchitecture: 'x64'
