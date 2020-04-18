@@ -195,6 +195,28 @@ namespace AsyncMethodNameFixer.Test
         }
 
         [TestMethod]
+        public void No_Diagnostics_Should_Show_For_IAsyncEnumerable_Method_Name_Ending_With_Async()
+        {
+            var test = @"
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Diagnostics;
+
+    namespace ConsoleApplication1
+    {
+        public class TypeName
+        {
+            public IAsyncEnumerable<int> FooAsync() => null;
+        }
+    }";
+
+            VerifyCSharpDiagnostic(test);
+        }
+
+        [TestMethod]
         public void Should_Give_Warning_And_Fix_If_Async_Method_Name_Does_Not_End_With_Async()
         {
             var test = @"
@@ -355,6 +377,25 @@ namespace AsyncMethodNameFixer.Test
         }
     }";
             VerifyCSharpFix(test, fixtest);
+        }
+
+        [TestMethod]
+        public void Should_Give_Warning_And_Fix_If_Return_Type_Is_IAsyncEnumerable_Method_Name_Does_Not_End_With_Async()
+        {
+            var test = @"
+    using System.Threading.Tasks;
+    using System.Collections.Generic;
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public IAsyncEnumerable<int> MyMethod(string input)
+            {
+               return null;
+            }
+        }
+    }";
+            ExpectMissingAsync(test, "MyMethod", 8, 42);
         }
 
         protected override CodeFixProvider GetCSharpCodeFixProvider()

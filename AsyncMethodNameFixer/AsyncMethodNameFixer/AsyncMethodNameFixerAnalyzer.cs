@@ -1,6 +1,5 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -50,7 +49,7 @@ namespace AsyncMethodNameFixer
                 .ToArray();
             var isAwaitable = allMembers.Contains(WellKnownMemberNames.GetAwaiter);
             //also check for async in case this is async void
-            return isAwaitable || method.IsAsync;
+            return isAwaitable || method.IsAsync || method.ReturnType.Name.Equals("IAsyncEnumerable");
         }
 
         private static void AnalyzeSymbol(SymbolAnalysisContext context)
@@ -60,7 +59,6 @@ namespace AsyncMethodNameFixer
             if (ShouldHaveAsyncInTheEnd(methodSymbol))
             {
                 var diagnostic = Diagnostic.Create(AsyncRule, methodSymbol.Locations[0], methodSymbol.Name);
-
                 context.ReportDiagnostic(diagnostic);
             }
 
