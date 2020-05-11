@@ -26,13 +26,13 @@ namespace AsyncMethodNameFixer.Test
             VerifyCSharpDiagnostic(inputText, expected);
         }
 
-        private void ExpectMissingAsync(string inputText, string methodName, int column, int row)
+        private void ExpectMissing(string inputText, string methodName, int column, int row)
         {
             var message = $"Asynchronous method '{ methodName }' is missing 'Async' at the end";
             ExpectDiagnostic(inputText, message, column, row, AsyncMethodNameFixerAnalyzer.AsyncDiagnosticId);
         }
 
-        private void ExpectUnnecessaryAsync(string inputText, string methodName, int column, int row)
+        private void ExpectUnnecessary(string inputText, string methodName, int column, int row)
         {
             var message = $"Synchronous method '{ methodName }' is having 'Async' at the end";
             ExpectDiagnostic(inputText, message, column, row, AsyncMethodNameFixerAnalyzer.NonAsyncDiagnosticId);
@@ -90,6 +90,24 @@ namespace AsyncMethodNameFixer.Test
             {
                 await Task.Delay(1000);
             }
+        }
+    }";
+
+            VerifyCSharpDiagnostic(test);
+        }
+
+        [TestMethod]
+        public void No_Diagnostics_Should_Show_For_Task_Returning_Properties()
+        {
+            var test = @"
+    using System;
+    using System.Threading.Tasks;
+
+    namespace ConsoleApplication1
+    {
+        public class TypeName
+        {
+            public Task Foo { get; }
         }
     }";
 
@@ -237,7 +255,7 @@ namespace AsyncMethodNameFixer.Test
             }
         }
     }";
-            ExpectMissingAsync(test, "MyMethod", 13, 31);
+            ExpectMissing(test, "MyMethod", 13, 31);
             var fixtest = @"
     using System;
     using System.Collections.Generic;
@@ -274,7 +292,7 @@ namespace AsyncMethodNameFixer.Test
             }
         }
     }";
-            ExpectMissingAsync(test, "MyMethod", 7, 25);
+            ExpectMissing(test, "MyMethod", 7, 25);
         }
 
         [TestMethod]
@@ -292,7 +310,7 @@ namespace AsyncMethodNameFixer.Test
             }
         }
     }";
-            ExpectMissingAsync(test, "MyMethod", 7, 31);
+            ExpectMissing(test, "MyMethod", 7, 31);
         }
 
         [TestMethod]
@@ -310,7 +328,7 @@ namespace AsyncMethodNameFixer.Test
             }
         }
     }";
-            ExpectMissingAsync(test, "MyMethod", 7, 30);
+            ExpectMissing(test, "MyMethod", 7, 30);
         }
 
         [TestMethod]
@@ -332,7 +350,37 @@ namespace AsyncMethodNameFixer.Test
             }
         }
     }";
-            ExpectMissingAsync(test, "MyMethod", 11, 31);
+            ExpectMissing(test, "MyMethod", 11, 31);
+        }
+
+        [TestMethod]
+        public void Should_Give_Warning_And_Fix_If_Task_Returning_Property_Name_Ends_With_Async()
+        {
+            var test = @"
+    using System;
+    using System.Threading.Tasks;
+
+    namespace ConsoleApplication1
+    {
+        public class TypeName
+        {
+            public Task FooAsync { get; }
+        }
+    }";
+
+            ExpectUnnecessary(test, "get_FooAsync", 9, 36);
+            var fixtest = @"
+    using System;
+    using System.Threading.Tasks;
+
+    namespace ConsoleApplication1
+    {
+        public class TypeName
+        {
+            public Task Foo { get; }
+        }
+    }";
+            VerifyCSharpFix(test, fixtest);
         }
 
         [TestMethod]
@@ -357,7 +405,7 @@ namespace AsyncMethodNameFixer.Test
         }
     }";
 
-            ExpectUnnecessaryAsync(test, "AsyncMethodAsync", 13, 25);
+            ExpectUnnecessary(test, "AsyncMethodAsync", 13, 25);
             var fixtest = @"
     using System;
     using System.Collections.Generic;
@@ -395,7 +443,7 @@ namespace AsyncMethodNameFixer.Test
             }
         }
     }";
-            ExpectMissingAsync(test, "MyMethod", 8, 42);
+            ExpectMissing(test, "MyMethod", 8, 42);
         }
 
         protected override CodeFixProvider GetCSharpCodeFixProvider()
