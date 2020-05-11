@@ -47,7 +47,9 @@ namespace AsyncMethodNameFixer
             var allMembers = returnType.Interfaces.SelectMany(i => i.MemberNames)
                 .Concat(returnType.GetMembers().Select(m => m.Name))
                 .ToArray();
+
             var isAwaitable = allMembers.Contains(WellKnownMemberNames.GetAwaiter);
+
             //also check for async in case this is async void
             return isAwaitable || method.IsAsync || method.ReturnType.Name.Equals("IAsyncEnumerable");
         }
@@ -81,6 +83,11 @@ namespace AsyncMethodNameFixer
 
             var methodAttributes = methodSymbol.GetAttributes();
 
+            if (methodSymbol.AssociatedSymbol is IPropertySymbol)
+            {
+                return false;
+            }
+
             foreach (var testMethodAttribute in testMethodAttributes)
             {
                 if (methodAttributes.Any(x => x.AttributeClass.Name.StartsWith(testMethodAttribute)))
@@ -101,6 +108,12 @@ namespace AsyncMethodNameFixer
             {
                 if (methodAttributes.Any(x => x.AttributeClass.Name.StartsWith(testMethodAttribute)))
                     return false;
+            }
+
+            if (methodSymbol.AssociatedSymbol is IPropertySymbol
+                && methodSymbol.Name.EndsWith("Async"))
+            {
+                return true;
             }
 
             return !IsAwaitable(methodSymbol)

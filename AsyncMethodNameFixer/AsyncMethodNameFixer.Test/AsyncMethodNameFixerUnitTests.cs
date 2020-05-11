@@ -97,6 +97,24 @@ namespace AsyncMethodNameFixer.Test
         }
 
         [TestMethod]
+        public void No_Diagnostics_Should_Show_For_Task_Returning_Properties()
+        {
+            var test = @"
+    using System;
+    using System.Threading.Tasks;
+
+    namespace ConsoleApplication1
+    {
+        public class TypeName
+        {
+            public Task Foo { get; }
+        }
+    }";
+
+            VerifyCSharpDiagnostic(test);
+        }
+
+        [TestMethod]
         public void No_Diagnostics_Should_Show_For_MS_Test_Methods()
         {
             var test = @"
@@ -333,6 +351,36 @@ namespace AsyncMethodNameFixer.Test
         }
     }";
             ExpectMissing(test, "MyMethod", 11, 31);
+        }
+
+        [TestMethod]
+        public void Should_Give_Warning_And_Fix_If_Task_Returning_Property_Name_Ends_With_Async()
+        {
+            var test = @"
+    using System;
+    using System.Threading.Tasks;
+
+    namespace ConsoleApplication1
+    {
+        public class TypeName
+        {
+            public Task FooAsync { get; }
+        }
+    }";
+
+            ExpectUnnecessary(test, "get_FooAsync", 9, 36);
+            var fixtest = @"
+    using System;
+    using System.Threading.Tasks;
+
+    namespace ConsoleApplication1
+    {
+        public class TypeName
+        {
+            public Task Foo { get; }
+        }
+    }";
+            VerifyCSharpFix(test, fixtest);
         }
 
         [TestMethod]

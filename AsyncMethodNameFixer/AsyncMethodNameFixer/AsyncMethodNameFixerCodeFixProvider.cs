@@ -29,22 +29,47 @@ namespace AsyncMethodNameFixer
             foreach (var diagnostic in context.Diagnostics)
             {
                 var diagnosticSpan = diagnostic.Location.SourceSpan;
-                var declaration = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().First();
-                string finalTitle = string.Empty;
-                if (diagnostic.Descriptor.Id == AsyncMethodNameFixerAnalyzer.AsyncDiagnosticId)
+                var stuff = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf();
+
+                if (stuff.Any(x => x is MethodDeclarationSyntax))
                 {
-                    finalTitle = string.Format(title, declaration.Identifier.Text, declaration.Identifier.Text.AppendAsyncToString());
+                    var declaration = stuff.OfType<MethodDeclarationSyntax>().First();
+                    string finalTitle = string.Empty;
+                    if (diagnostic.Descriptor.Id == AsyncMethodNameFixerAnalyzer.AsyncDiagnosticId)
+                    {
+                        finalTitle = string.Format(title, declaration.Identifier.Text, declaration.Identifier.Text.AppendAsyncToString());
+                    }
+                    else if (diagnostic.Descriptor.Id == AsyncMethodNameFixerAnalyzer.NonAsyncDiagnosticId)
+                    {
+                        var newTitle = declaration.Identifier.Text.RemoveAsyncFromString();
+                        finalTitle = string.Format(title, declaration.Identifier.Text, newTitle);
+                    }
+
+                    context.RegisterCodeFix(CodeAction.Create(
+                       title: finalTitle,
+                       createChangedSolution: c => RenameMethodAsync(diagnostic.Descriptor.Id, context.Document, declaration, c),
+                       equivalenceKey: finalTitle), diagnostic);
                 }
-                else if (diagnostic.Descriptor.Id == AsyncMethodNameFixerAnalyzer.NonAsyncDiagnosticId)
+                else if (stuff.Any(x => x is PropertyDeclarationSyntax))
                 {
-                    var newTitle = declaration.Identifier.Text.RemoveAsyncFromString();
-                    finalTitle = string.Format(title, declaration.Identifier.Text, newTitle);
+                    var declaration = stuff.OfType<PropertyDeclarationSyntax>().First();
+                    string finalTitle = string.Empty;
+                    if (diagnostic.Descriptor.Id == AsyncMethodNameFixerAnalyzer.AsyncDiagnosticId)
+                    {
+                        finalTitle = string.Format(title, declaration.Identifier.Text, declaration.Identifier.Text.AppendAsyncToString());
+                    }
+                    else if (diagnostic.Descriptor.Id == AsyncMethodNameFixerAnalyzer.NonAsyncDiagnosticId)
+                    {
+                        var newTitle = declaration.Identifier.Text.RemoveAsyncFromString();
+                        finalTitle = string.Format(title, declaration.Identifier.Text, newTitle);
+                    }
+
+                    context.RegisterCodeFix(CodeAction.Create(
+                       title: finalTitle,
+                       createChangedSolution: c => RenamePropertyAsync(diagnostic.Descriptor.Id, context.Document, declaration, c),
+                       equivalenceKey: finalTitle), diagnostic);
                 }
 
-                context.RegisterCodeFix(CodeAction.Create(
-                   title: finalTitle,
-                   createChangedSolution: c => RenameMethodAsync(diagnostic.Descriptor.Id, context.Document, declaration, c),
-                   equivalenceKey: finalTitle), diagnostic);
             }
         }
 
@@ -62,6 +87,30 @@ namespace AsyncMethodNameFixer
             // Get the symbol representing the type to be renamed.
             var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
             var typeSymbol = semanticModel.GetDeclaredSymbol(methodDeclaration, cancellationToken);
+
+            // Produce a new solution that has all references to that type renamed, including the declaration.
+            var originalSolution = document.Project.Solution;
+            var optionSet = originalSolution.Workspace.Options;
+            var newSolution = await Renamer.RenameSymbolAsync(document.Project.Solution, typeSymbol, newName, optionSet, cancellationToken).ConfigureAwait(false);
+
+            // Return the new solution with the now-uppercase type name.
+            return newSolution;
+        }
+
+        private async Task<Solution> RenamePropertyAsync(string diagnosticDescriptorId, Document document, PropertyDeclarationSyntax prpoertyDelcaration, CancellationToken cancellationToken)
+        {
+            var identifierToken = prpoertyDelcaration.Identifier;
+
+            // Compute new name.
+            string newName = string.Empty;
+            if (diagnosticDescriptorId.Equals(AsyncMethodNameFixerAnalyzer.AsyncDiagnosticId))
+                newName = identifierToken.Text.AppendAsyncToString();
+            else if (diagnosticDescriptorId.Equals(AsyncMethodNameFixerAnalyzer.NonAsyncDiagnosticId))
+                newName = identifierToken.Text.RemoveAsyncFromString();
+
+            // Get the symbol representing the type to be renamed.
+            var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
+            var typeSymbol = semanticModel.GetDeclaredSymbol(prpoertyDelcaration, cancellationToken);
 
             // Produce a new solution that has all references to that type renamed, including the declaration.
             var originalSolution = document.Project.Solution;
