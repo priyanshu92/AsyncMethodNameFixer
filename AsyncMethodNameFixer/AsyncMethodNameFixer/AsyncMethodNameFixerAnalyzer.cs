@@ -25,7 +25,7 @@ namespace AsyncMethodNameFixer
 
         private static readonly DiagnosticDescriptor NonAsyncRule = new DiagnosticDescriptor(NonAsyncDiagnosticId, NonAsyncTitle, NonAsyncMessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: NonAsyncDescription);
 
-        private static readonly IList<string> testMethodAttributes = new List<string> { "TestMethod", "Test", "SetUp", "Theory", "Fact" };
+        private static readonly IList<string> testMethodAttributes = new List<string> { "TestMethod", "Test", "SetUp", "Theory", "Fact", "DataTestMethod" };
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(AsyncRule, NonAsyncRule);
 
@@ -90,6 +90,7 @@ namespace AsyncMethodNameFixer
             return IsAwaitable(methodSymbol)
                 && !methodSymbol.IsOverride
                 && !methodSymbol.Name.Equals("Main")
+                && !methodSymbol.Name.Equals("<Main>$")
                 && !methodSymbol.Name.EndsWith("Async");
         }
 

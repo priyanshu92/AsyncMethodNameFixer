@@ -1,17 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncMethodNameFixer", "AsyncMethodNameFixer\AsyncMethodNameFixer\AsyncMethodNameFixer.csproj", "{474C4094-747B-4C19-9D8F-54C5C35DB1FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncMethodNameFixer", "AsyncMethodNameFixer\AsyncMethodNameFixer\AsyncMethodNameFixer.csproj", "{474C4094-747B-4C19-9D8F-54C5C35DB1FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncMethodNameFixer.Test", "AsyncMethodNameFixer\AsyncMethodNameFixer.Test\AsyncMethodNameFixer.Test.csproj", "{91BB9172-5878-4160-BA98-7B9319B4AEC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncMethodNameFixer.Test", "AsyncMethodNameFixer\AsyncMethodNameFixer.Test\AsyncMethodNameFixer.Test.csproj", "{91BB9172-5878-4160-BA98-7B9319B4AEC2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncMethodNameFixer.Vsix", "AsyncMethodNameFixer\AsyncMethodNameFixer.Vsix\AsyncMethodNameFixer.Vsix.csproj", "{AE86594F-67C8-48C9-98A7-880C9BC8041D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E3867007-A47D-4596-9CDE-9317669A5FDD}"
 	ProjectSection(SolutionItems) = preProject
-		appveyor.yml = appveyor.yml
+		azure-pipelines.yml = azure-pipelines.yml
 		CHANGELOG.md = CHANGELOG.md
 		README.md = README.md
 	EndProjectSection
