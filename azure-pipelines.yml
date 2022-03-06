@@ -74,15 +74,6 @@ steps:
     arguments: '$(Build.ArtifactStagingDirectory)\Packages\*.vsix'
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
 
-# - task: NuGetCommand@2
-#   displayName: 'Publish to Nuget'
-#   inputs:
-#     command: 'push'
-#     searchPatternPush: '$(Build.ArtifactStagingDirectory)/Packages/*.nupkg'
-#     nuGetFeedType: 'external'
-#     externalEndpoint: 'e4a8dbfd-683b-4512-9d91-e3c2a6e3a181'
-#   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-
 - task: NuGetCommand@2
   displayName: 'Publish to Nuget'
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
