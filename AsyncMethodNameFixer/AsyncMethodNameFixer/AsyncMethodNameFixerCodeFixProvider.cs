@@ -22,6 +22,11 @@ namespace AsyncMethodNameFixer
             get { return ImmutableArray.Create(AsyncMethodNameFixerAnalyzer.AsyncDiagnosticId, AsyncMethodNameFixerAnalyzer.NonAsyncDiagnosticId); }
         }
 
+        public override FixAllProvider GetFixAllProvider()
+        {
+            return WellKnownFixAllProviders.BatchFixer;
+        }
+
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
@@ -41,10 +46,12 @@ namespace AsyncMethodNameFixer
                     finalTitle = string.Format(title, declaration.Identifier.Text, newTitle);
                 }
 
-                context.RegisterCodeFix(CodeAction.Create(
-                   title: finalTitle,
-                   createChangedSolution: c => RenameMethodAsync(diagnostic.Descriptor.Id, context.Document, declaration, c),
-                   equivalenceKey: finalTitle), diagnostic);
+                if (finalTitle != string.Empty) {
+                    context.RegisterCodeFix(CodeAction.Create(
+                       title: finalTitle,
+                       createChangedSolution: c => RenameMethodAsync(diagnostic.Descriptor.Id, context.Document, declaration, c),
+                       equivalenceKey: diagnostic.Descriptor.Id), diagnostic);
+                }
             }
         }
 
@@ -61,12 +68,18 @@ namespace AsyncMethodNameFixer
 
             // Get the symbol representing the type to be renamed.
             var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
+            var renameOptions = new SymbolRenameOptions
+            {
+                RenameFile = false,
+                RenameInComments = true,
+                RenameInStrings = false,
+                RenameOverloads = true
+            };
             var typeSymbol = semanticModel.GetDeclaredSymbol(methodDeclaration, cancellationToken);
 
             // Produce a new solution that has all references to that type renamed, including the declaration.
             var originalSolution = document.Project.Solution;
-            var optionSet = originalSolution.Workspace.Options;
-            var newSolution = await Renamer.RenameSymbolAsync(document.Project.Solution, typeSymbol, newName, optionSet, cancellationToken).ConfigureAwait(false);
+            var newSolution = await Renamer.RenameSymbolAsync(originalSolution, typeSymbol, renameOptions, newName, cancellationToken).ConfigureAwait(false);
 
             // Return the new solution with the now-uppercase type name.
             return newSolution;
