@@ -28,13 +28,13 @@ namespace AsyncMethodNameFixer.Test
 
         private void ExpectMissingAsync(string inputText, string methodName, int column, int row)
         {
-            var message = $"Asynchronous method '{ methodName }' is missing 'Async' at the end";
+            var message = $"Asynchronous method '{methodName}' is not suffixed 'Async'";
             ExpectDiagnostic(inputText, message, column, row, AsyncMethodNameFixerAnalyzer.AsyncDiagnosticId);
         }
 
         private void ExpectUnnecessaryAsync(string inputText, string methodName, int column, int row)
         {
-            var message = $"Synchronous method '{ methodName }' is having 'Async' at the end";
+            var message = $"Synchronous method '{methodName}' should not be suffixed 'Async'";
             ExpectDiagnostic(inputText, message, column, row, AsyncMethodNameFixerAnalyzer.NonAsyncDiagnosticId);
         }
 
