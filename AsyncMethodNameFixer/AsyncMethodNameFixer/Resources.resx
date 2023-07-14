@@ -118,24 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AsyncAnalyzerDescription" xml:space="preserve">
-    <value>Asynchronous methods should end with the word 'Async'</value>
-    <comment>An optional longer localizable description of the diagnostic.</comment>
+    <value>The naming convention for asynchronous methods is to append 'Async' to the method name to indicate that it is awaitable. However, this method is not suffixed 'Async' and can therefor be confusing and misleading for developers who expect an synchronous operation.
+When an asynchronous method is not awaited, it can in certain situations lead to unexpected behaviors such as a Dependency Injection framework cleaning up disposable objects used within async methods, resulting in ObjectDisposedException.</value>
   </data>
   <data name="AsyncAnalyzerMessageFormat" xml:space="preserve">
-    <value>Asynchronous method '{0}' is missing 'Async' at the end</value>
-    <comment>The format-able message the diagnostic displays.</comment>
+    <value>Asynchronous method '{0}' is not suffixed 'Async'</value>
   </data>
   <data name="AsyncAnalyzerTitle" xml:space="preserve">
-    <value>Asynchronous method name is not ending with 'Async'</value>
-    <comment>The title of the diagnostic.</comment>
+    <value>Awaitable (Asynchronous) methods should be suffixed with 'Async'</value>
   </data>
   <data name="NonAsyncAnalyzerDescription" xml:space="preserve">
-    <value>Synchronous methods should not end with the word 'Async'</value>
+    <value>The naming convention for asynchronous methods is to append 'Async' to the method name to indicate that it is awaitable. However, this method is not awaitable and can therefor be confusing and misleading for developers who expect an asynchronous operation.</value>
   </data>
   <data name="NonAsyncAnalyzerMessageFormat" xml:space="preserve">
-    <value>Synchronous method '{0}' is having 'Async' at the end</value>
+    <value>Synchronous method '{0}' should not be suffixed 'Async'</value>
   </data>
   <data name="NonAsyncAnalyzerTitle" xml:space="preserve">
-    <value>Synchronous method name is ending with 'Async'</value>
+    <value>Non-awaitable (Synchronous) methods should not be suffixed with 'Async'</value>
   </data>
 </root>

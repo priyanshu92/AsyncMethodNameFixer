@@ -19,7 +19,7 @@ namespace AsyncMethodNameFixer {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -61,7 +61,8 @@ namespace AsyncMethodNameFixer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Asynchronous methods should end with the word &apos;Async&apos;.
+        ///   Looks up a localized string similar to The naming convention for asynchronous methods is to append &apos;Async&apos; to the method name to indicate that it is awaitable. However, this method is not suffixed &apos;Async&apos; and can therefor be confusing and misleading for developers who expect an synchronous operation.
+        ///When an asynchronous method is not awaited, it can in certain situations lead to unexpected behaviors such as a Dependency Injection framework cleaning up disposable objects used within async methods, resulting in ObjectDisposedException..
         /// </summary>
         internal static string AsyncAnalyzerDescription {
             get {
@@ -70,7 +71,7 @@ namespace AsyncMethodNameFixer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Asynchronous method &apos;{0}&apos; is missing &apos;Async&apos; at the end.
+        ///   Looks up a localized string similar to Asynchronous method &apos;{0}&apos; is not suffixed &apos;Async&apos;.
         /// </summary>
         internal static string AsyncAnalyzerMessageFormat {
             get {
@@ -79,7 +80,7 @@ namespace AsyncMethodNameFixer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Asynchronous method name is not ending with &apos;Async&apos;.
+        ///   Looks up a localized string similar to Awaitable (Asynchronous) methods should be suffixed with &apos;Async&apos;.
         /// </summary>
         internal static string AsyncAnalyzerTitle {
             get {
@@ -88,7 +89,7 @@ namespace AsyncMethodNameFixer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Synchronous methods should not end with the word &apos;Async&apos;.
+        ///   Looks up a localized string similar to The naming convention for asynchronous methods is to append &apos;Async&apos; to the method name to indicate that it is awaitable. However, this method is not awaitable and can therefor be confusing and misleading for developers who expect an asynchronous operation..
         /// </summary>
         internal static string NonAsyncAnalyzerDescription {
             get {
@@ -97,7 +98,7 @@ namespace AsyncMethodNameFixer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Synchronous method &apos;{0}&apos; is having &apos;Async&apos; at the end.
+        ///   Looks up a localized string similar to Synchronous method &apos;{0}&apos; should not be suffixed &apos;Async&apos;.
         /// </summary>
         internal static string NonAsyncAnalyzerMessageFormat {
             get {
@@ -106,7 +107,7 @@ namespace AsyncMethodNameFixer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Synchronous method name is ending with &apos;Async&apos;.
+        ///   Looks up a localized string similar to Non-awaitable (Synchronous) methods should not be suffixed with &apos;Async&apos;.
         /// </summary>
         internal static string NonAsyncAnalyzerTitle {
             get {
