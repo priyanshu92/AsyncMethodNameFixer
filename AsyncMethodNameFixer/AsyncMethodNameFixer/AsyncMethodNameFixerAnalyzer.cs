@@ -73,7 +73,7 @@ namespace AsyncMethodNameFixer
 
         private static bool ShouldHaveAsyncInTheEnd(IMethodSymbol methodSymbol)
         {
-            var interfaces = methodSymbol.ContainingType.Interfaces;
+            var interfaces = methodSymbol.ContainingType.AllInterfaces;
 
             foreach (var item in interfaces)
             {

@@ -398,6 +398,33 @@ namespace AsyncMethodNameFixer.Test
             ExpectMissingAsync(test, "MyMethod", 8, 42);
         }
 
+        [TestMethod]
+        public void Should_Give_Warning_Only_For_Nested_Interface_Method_Name()
+        {
+            var test = @"
+    using System.Threading.Tasks;
+    namespace ConsoleApplication1
+    {
+        interface IFirst
+        {
+            Task MyMethod();
+        }
+
+        interface ISecond : IFirst
+        {
+        }
+
+        class TypeName : ISecond
+        {
+            public Task MyMethod()
+            {
+                return Task.CompletedTask;
+            }
+        }
+    }";
+            ExpectMissingAsync(test, "MyMethod", 7, 18);
+        }
+
         protected override CodeFixProvider GetCSharpCodeFixProvider()
         {
             return new AsyncMethodNameFixerCodeFixProvider();
