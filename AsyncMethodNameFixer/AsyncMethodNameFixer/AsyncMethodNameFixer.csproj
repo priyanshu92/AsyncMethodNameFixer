@@ -10,7 +10,7 @@
 
   <PropertyGroup>
     <PackageId>AsyncMethodNameFixer</PackageId>
-    <PackageVersion>2.2.0</PackageVersion>
+    <PackageVersion>2.3.0</PackageVersion>
     <Authors>Priyanshu Agrawal</Authors>
     <PackageLicenseUrl>https://github.com/priyanshu92/AsyncMethodNameFixer/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/priyanshu92/AsyncMethodNameFixer</PackageProjectUrl>
