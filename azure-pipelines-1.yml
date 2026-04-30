@@ -18,6 +18,9 @@ steps:
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
 
-- task: microsoft-IsvExpTools.PowerPlatform-BuildTools.tool-installer.PowerPlatformToolInstaller@2
-  displayName: 'Power Platform Tool Installer'
+- task: PowerPlatformToolInstaller@2.0.97
+  inputs:
+    DefaultVersion: false
+    AddToolsToPath: true
+    MicrosoftPowerAppsCheckerVersion: '(obsolete)'
 
